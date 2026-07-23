@@ -20,6 +20,14 @@ Her er specifikationerne og retningslinjerne for min opsætning og appen:
 
 4.  **GitHub Action til Deploy**: 
     *   Opret en `.github/workflows/deploy.yml` fil, der installerer afhængigheder, kører `npm run build` og derefter uploader `dist/` mappen via FTP (brug f.eks. `SamKirkland/FTP-Deploy-Action`).
+  
+    *   [DEPLOYMENT & FTP RETNINGSLINJER]
+Når du opretter GitHub Actions workflowet (.github/workflows/deploy.yml) til Simply.com:
+1. Brug altid præcise versionsnumre på tredjeparts-actions (f.eks. SamKirkland/FTP-Deploy-Action@v4.3.5 i stedet for @v4).
+2. Brug `npm install` i stedet for `npm ci` i installationstrinnet for at undgå fejl med manglende låsefiler.
+3. Sæt `node-version: '22'` (eller nyere) under `actions/setup-node@v4` og undlad `cache: 'npm'` hvis der ikke er en fast `package-lock.json`.
+4. Inkluder en sikkerhedsmargin for FTP-upload ved at tilføje `timeout: 60000` under FTP-deploy actionens `with:` blok for at undgå ECONNRESET ved første store synkronisering.
+5. Sørg for at spørge om subdomænenavn og mappe (f.eks. ../subdomænenavn/) før oprettelse.
 
 5.  **Server-struktur (Simply.com)**:
     *   Domænet er **kastanievej7.dk**.
